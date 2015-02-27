@@ -4,8 +4,19 @@
 *
 */
 
+/* Map array example
+ mapArray = [[0,0,0,0,0,0,0],
+                    [0,0,0,0,0,0,0],
+                    [0,0,0,0,0,0,0],
+                    [0,0,0,0,0,0,0],
+					[0,0,0,0,0,0,0],
+					[0,0,0,0,0,0,0],
+					[0,0,0,0,0,0,0]]; */
+					
 var mapArray = null;
+var emptyValue = 0;
 var mapLong = 5;
+var shipList = [];
 
 // function to create a matrix 
 
@@ -78,3 +89,97 @@ createMatrix(mapLong);
 showMatrix();
 getCoordinates();
 showMatrix();
+
+
+/**
+ * Load ships into the map and list of ships.
+ * Number of ships created is according to long of the map 
+ */
+function loadShips()
+{
+    for (var i = 0; i <  Math.floor(mapArray.length / 2); i++) {
+        shipList.push(createShip());
+    };
+}
+
+/**
+ * Create a ship according to random position(x,y), random size and random
+ *     direction.
+ * @return {array} This returns an array with the ship identifier and the ship
+ *    size.
+ */
+function createShip()
+{
+    var dir = Math.floor(Math.random() * 2);
+    var size = Math.floor((Math.random() * 3) + 2);
+    var id = Math.floor((Math.random() * 1000) + 1);
+    var randomRow;
+    var randomCol;
+    var itIsAvailable = false; 
+    while(itIsAvailable == false)
+    {
+        randomRow = Math.floor(Math.random() * mapArray.length);
+        randomCol = Math.floor(Math.random() * mapArray.length);
+        itIsAvailable = hasAvailableSpaces(dir,size,randomRow,randomCol);
+    }
+    deployShip(id,dir,size,randomRow,randomCol)
+    return [id,size];
+}
+
+/**
+ * This reivew if a ship can be deployed in the map.
+ * @param {int} dir This is direction 0 = horizontal and 1 = vertical.
+ * @param {int} size This is size of the ship.
+ * @param {int} row This is the row.
+ * @param {int} row This is the column.
+ * @return {boolean} This returns true if all fields are available to deploy the
+ *    ship.
+ */
+function hasAvailableSpaces(dir,size,row,col)
+{
+    if(mapArray[row][col] == emptyValue)
+    {
+        for (var i = 1; i <= size; i++)
+        {
+            if((row + i) > mapArray.length - 1 || (row + i) > mapArray.length - 1)
+                return false;
+            if(dir == 0)
+            {
+                if(mapArray[row][col + i] != emptyValue)
+                    return false;
+                continue;
+            }
+            else
+            {
+                if(mapArray[row + i][col] != emptyValue)
+                    return false;
+            }
+        }
+        return true;
+    }
+    return false;
+}
+
+/**
+ * This deploy a ship in the map.
+ * @param {int} id This is the identifier for the ship.
+ * @param {int} dir This is direction 0 = horizontal and 1 = vertical.
+ * @param {int} size This is size of the ship.
+ * @param {int} row This is the row.
+ * @param {int} row This is the column.
+ */
+function deployShip(id,dir,size,row,col)
+{
+    for (var i = 1; i <= size; i++)
+    {
+        if(dir == 0)
+        {
+            mapArray[row][col + i] = id;
+            continue;
+        }
+        else
+        {
+            mapArray[row + i][col] = id;
+        }
+    }
+}
