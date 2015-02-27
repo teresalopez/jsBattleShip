@@ -1,17 +1,19 @@
-/**  ---- BattleShip  ----
-*Your mission is to destroy the enemy fleet! Play against the computer and try to sink all of its 
-*battleships before it sinks all of yours. The first player to sink all of the opponent's ships wins.
+/**  ---- BattleShip game ----
+* Your mission is to destroy the enemy fleet! Play against the computer and try to sink all of its 
+* battleships before it sinks all of yours. The first player to sink all of the opponent's ships wins.
 *
 */
+
 var mapArray = null;
+var mapLong = 5;
 
 // function to create a matrix 
 
-var createMatrix = function (n){
-	mapArray = new Array(n);
-	for (var i = 0; i < n; i++) {
-		mapArray[i] = new Array(n);
-		for (var j = 0; j < n; j++) {
+var createMatrix = function (mapLong){
+	mapArray = new Array(mapLong);
+	for (var i = 0; i < mapLong; i++) {
+		mapArray[i] = new Array(mapLong);
+		for (var j = 0; j < mapLong; j++) {
 			mapArray[i][j] = '(' + i + ',' + j + ')';
 					
 		}
@@ -22,9 +24,8 @@ var createMatrix = function (n){
 // Function to update a matrix
 var updateMatrix = function(x,y){
 	for (var i = 0; i <= x; i++) {
-		//mapArray[i] = new Array(n);
 		for (var j = 0; j <= y; j++) {
-			if (i==x & j==y){
+			if (i==x && j==y){
 				mapArray[i][j] = '(X,X)';
 			}
 					
@@ -32,7 +33,6 @@ var updateMatrix = function(x,y){
 	}
 	
 	return mapArray;
-	
 };
 
 // function to display matrix
@@ -49,15 +49,32 @@ var showMatrix = function (){
 };
 
 // function to get values from console
+ 
 var getCoordinates = function(){
-	console.log("Plese enter your coordinates for game");
-	var x= window.prompt("Coordinate X:");
-	var y= window.prompt("Coordinate Y:");
+	console.log("Please enter your coordinates for game");
+	var x= window.prompt("Enter a coordinate X  (between 0 and "+ mapLong+':');
+	while ( x <0 || x>= mapLong || haveLetter(x)){
+		 x= window.prompt('Valor fuera de rango, usted debe ingresar un numero entre 0 '+mapLong+': ');
+	}
+	var y= window.prompt('Enter a coordinate Y  (between 0 and '+mapLong+'):');	
+	while ( y <0 || y>= mapLong || haveLetter(y)){
+		y = window.prompt('Valor fuera de rango, usted debe ingresar un numero entre 0 '+mapLong+':');
+	}
+	
 	updateMatrix(y,x);
 	
 };
 
-createMatrix(5);
+// function to validate only numbers, it returns true -> if there are chars
+var haveLetter = function(text){
+	
+	if(!/^([0-9])*$/.test(text)){
+		return true;
+	}
+	return false;
+};
+
+createMatrix(mapLong);
 showMatrix();
 getCoordinates();
 showMatrix();
