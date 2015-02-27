@@ -20,16 +20,17 @@ var shipList = [];
 
 // function to create a matrix 
 
-var createMatrix = function (mapLong){
-	mapArray = new Array(mapLong);
-	for (var i = 0; i < mapLong; i++) {
-		mapArray[i] = new Array(mapLong);
-		for (var j = 0; j < mapLong; j++) {
-			mapArray[i][j] = '(' + i + ',' + j + ')';
+var createMatrix = function (size){
+	var mapArray1 = new Array(size);
+	for (var i = 0; i < size; i++) {
+		mapArray1[i] = new Array(size);
+		for (var j = 0; j < size; j++) {
+			//mapArray1[i][j] = '(' + i + ',' + j + ')';
+			mapArray1[i][j] = 0;
 					
 		}
 	}
-	return mapArray;
+	return mapArray1;
 };
 
 // Function to update a matrix
@@ -47,12 +48,12 @@ var updateMatrix = function(x,y){
 };
 
 // function to display matrix
-var showMatrix = function (){
-	if(mapArray != null) {
-		for (var i = 0; i < mapArray.length; i++) {
+var showMatrix = function (array){
+	if(array != null) {
+		for (var i = 0; i < array.length; i++) {
 			var msg = '';
-			for (var j = 0; j < mapArray[i].length; j++) {
-				msg = msg + mapArray[i][j] + ' ';
+			for (var j = 0; j < array[i].length; j++) {
+				msg = msg + array[i][j] + ' ';
 			}
 			console.log(msg);
 		}
@@ -85,10 +86,6 @@ var haveLetter = function(text){
 	return false;
 };
 
-createMatrix(mapLong);
-showMatrix();
-getCoordinates();
-showMatrix();
 
 
 /**
@@ -183,3 +180,10 @@ function deployShip(id,dir,size,row,col)
         }
     }
 }
+// TODO : we need to implement a main function
+mapArray = createMatrix(mapLong);
+loadShips();
+console.log("Matrix - BattleShip game for USer!!!");
+showMatrix(mapArray);
+getCoordinates();
+showMatrix(mapArray);
