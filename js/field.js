@@ -7,6 +7,7 @@ var Field = function(){
 				['0','0','0','0'],
 				['0','0','0','0'],
 				['0','0','0','0']];
+	this._emptyValue = '0';
 	this._ships = [];
 	
 	// Defintion of class method
@@ -20,19 +21,113 @@ var Field = function(){
 		console.log('PLAYER: ', this._field.join('-').replace(/1/g, '0'));
 	};
 	
-	this._drawShip = function(ship,pos){
-		var initPos = parseInt(Math.random() * (this.size - ship.size));
-		
-		for (var i = initPos; i < (initPos + ship.size); i++) {
-			this._field[pos][i] = ship.id;
+	this._drawShip = function(ship){
+		var dir;
+		var initPosX;
+		var initPosY;
+		do
+		{
+			dir = Math.floor(Math.random() * 2);
+			if(dir == 0)
+			{
+				initPosX = parseInt(Math.random() * (this.size - ship.size));
+				initPosY = parseInt(Math.random() * (this.size));
+			}
+			else
+			{
+				initPosX = parseInt(Math.random() * (this.size));
+				initPosY = parseInt(Math.random() * (this.size - ship.size));	
+			}
 		}
+		while(hasAvailableSpaces(dir, ship.size, initPosX, initPosY))
+		
+		this._deployShip(ship.id, dir, ship.size, initPosX, initPosY);
+	};
+	
+	/**
+	 * This reivew if a ship can be deployed in the map.
+	 * @param {int} dir This is direction 0 = horizontal and 1 = vertical.
+	 * @param {int} size This is size of the ship.
+	 * @param {int} row This is the row.
+	 * @param {int} row This is the column.
+	 * @return {boolean} This returns true if all fields are available to deploy the
+	 *    ship.
+	 */
+	this._hasAvailableSpaces = function(dir,size,row,col){
+		if(this._field[row][col] == this._emptyValue)
+		{
+			for (var i = 0; i < size ; i++)
+			{
+				//if((row + i) > this._field.length - 1 || (row + i) > this._field.length - 1)
+				//	return false;
+				if(dir == 0)
+				{
+					if(this._field[row][col + i] != this._emptyValue)
+						return false;
+					continue;
+				}
+				else
+				{
+					if(this._field[row + i][col] != this._emptyValue)
+						return false;
+				}
+			}
+			return true;
+		}
+		return false;
+	};
+	
+	/**
+	 * This deploy a ship in the map.
+	 * @param {int} id This is the identifier for the ship.
+	 * @param {int} dir This is direction 0 = horizontal and 1 = vertical.
+	 * @param {int} size This is size of the ship.
+	 * @param {int} row This is the row.
+	 * @param {int} row This is the column.
+	 */
+	this._deployShip = function(id, dir, size, row, col){
+		for (var i = 0; i < size ; i++)
+		{
+			if(dir == 0)
+			{
+				this._field[row][col + i] = id;
+				continue;
+			}
+			else
+			{
+				this._field[row + i][col] = id;
+			}
+		}
+	};
+	
+	this._drawShip = function(ship){
+		var dir;
+		var initPosX;
+		var initPosY;
+		do
+		{
+			dir = Math.floor(Math.random() * 2);
+			if(dir == 0)
+			{
+				initPosX = parseInt(Math.random() * (this.size));
+				initPosY = parseInt(Math.random() * (this.size - ship.size));
+			}
+			else
+			{
+				initPosX = parseInt(Math.random() * (this.size - ship.size));	
+				initPosY = parseInt(Math.random() * (this.size));
+			}
+		}
+		while(!this._hasAvailableSpaces(dir, ship.size, initPosX, initPosY))
+		
+		this._deployShip(ship.id, dir, ship.size, initPosX, initPosY);
 	};
 	
 	this._initShips = function() {
 		for (var i = 1; i <= this.numShips; i++) {
 			var ship = new Ship(i);
 			this._ships[ship.id] = ship;
-			this._drawShip(ship,i);
+			this._drawShip(ship);
 		}
 	};
 	
