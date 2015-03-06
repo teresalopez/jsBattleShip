@@ -10,12 +10,13 @@ var Game = function(){
 		do {
 			var limit = player.field.size - 1;
 			// var shot = new Shot(window.prompt('Shot? [0 - ' + limit + ']'));
-			var shot = Number(window.prompt('Shot? [0 - ' + limit + ']'));
+			var shotX = Number(window.prompt('Shot axis X value? [0 - ' + limit + ']'));
+			var shotY = Number(window.prompt('Shot axis Y value? [0 - ' + limit + ']'));
 			
-			player.field.evalShot(shot);
+			player.field.evalShot(shotX,shotY);
 			
-		//} while(this.players[0].status == 'LOOSER');
 		} while(player.isLooser());
+		
 	};
 	
 	this.start = function(numsPlayers){
