@@ -1,24 +1,41 @@
 // Field class
 var Field = function(){
 	// Constructor code
-	this.size = 4; // Optional
+	this.size = 10; // Optional
 	this.numShips = 3; // Optional
-	this._field = [['0','0','0','0'], 
-				['0','0','0','0'],
-				['0','0','0','0'],
-				['0','0','0','0']];
+	this._field = [];	
 	this._emptyValue = '0';
 	this._ships = [];
 	
-	// Defintion of class method
+	// Definition of class method
 	this._initField = function() {
+		
 		for (var i = 0; i < this.size; i++) {
-			this._field[i] = '0';
+			this._field[i] =new Array(this.size);
+			for (var j = 0; j < this.size; j++){
+				
+				this._field[i][j] = '0';
+				
+			}
+			
 		}
 	};
+	
+		
 	this.drawn = function() {
-		console.log('TEST: ', this._field.join('-'));
-		console.log('PLAYER: ', this._field.join('-').replace(/1/g, '0'));
+		console.log('DEVELOPER:\n', this._field.join('\n'));
+		console.log('PLAYER:\n', this._field.join('\n').replace(/[1-9]/g, '0'));
+		/*
+		console.log('Developer:\n');
+		for (var i = 0; i < this._field.length; i++) {
+			var msg = '';
+			for (var j = 0; j < this._field[i].length; j++) {
+				msg = msg + this._field[i][j] + ' ';
+			}
+			console.log(msg);
+		}
+	*/
+		
 	};
 	
 	this._drawShip = function(ship){
@@ -39,13 +56,13 @@ var Field = function(){
 				initPosY = parseInt(Math.random() * (this.size - ship.size));	
 			}
 		}
-		while(hasAvailableSpaces(dir, ship.size, initPosX, initPosY))
+		while(this._hasAvailableSpaces(dir, ship.size, initPosX, initPosY))
 		
 		this._deployShip(ship.id, dir, ship.size, initPosX, initPosY);
 	};
 	
 	/**
-	 * This reivew if a ship can be deployed in the map.
+	 * This review if a ship can be deployed in the map.
 	 * @param {int} dir This is direction 0 = horizontal and 1 = vertical.
 	 * @param {int} size This is size of the ship.
 	 * @param {int} row This is the row.
@@ -168,7 +185,7 @@ var Field = function(){
 		}
 	};
 	
-	//this._initField();
+	this._initField();
 	this._initShips();
 	this.drawn();
 };
